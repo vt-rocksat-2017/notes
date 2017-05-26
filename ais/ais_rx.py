@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Ais Rx
-# Generated: Wed May 24 00:22:14 2017
+# Generated: Fri May 26 17:38:44 2017
 ##################################################
 
 from gnuradio import analog
@@ -16,6 +16,7 @@ from gnuradio import uhd
 from gnuradio.eng_option import eng_option
 from gnuradio.filter import firdes
 from optparse import OptionParser
+import ais
 import math
 import time
 
@@ -91,11 +92,17 @@ class ais_rx(gr.top_block):
         self.analog_agc2_xx_0_0.set_max_gain(65536)
         self.analog_agc2_xx_0 = analog.agc2_cc(1e-3, 1e-1, 1.0, 1.0)
         self.analog_agc2_xx_0.set_max_gain(65536)
+        self.ais_pdu_to_nmea_0_0 = ais.pdu_to_nmea('B')
+        self.ais_pdu_to_nmea_0 = ais.pdu_to_nmea('A')
 
         ##################################################
         # Connections
         ##################################################
+        self.msg_connect((self.ais_pdu_to_nmea_0, 'out'), (self.blocks_socket_pdu_0, 'pdus'))
+        self.msg_connect((self.ais_pdu_to_nmea_0_0, 'out'), (self.blocks_socket_pdu_0, 'pdus'))
+        self.msg_connect((self.digital_hdlc_deframer_bp_0, 'out'), (self.ais_pdu_to_nmea_0, 'to_nmea'))
         self.msg_connect((self.digital_hdlc_deframer_bp_0, 'out'), (self.blocks_socket_pdu_0, 'pdus'))
+        self.msg_connect((self.digital_hdlc_deframer_bp_0_0, 'out'), (self.ais_pdu_to_nmea_0_0, 'to_nmea'))
         self.msg_connect((self.digital_hdlc_deframer_bp_0_0, 'out'), (self.blocks_socket_pdu_0, 'pdus'))
         self.connect((self.analog_agc2_xx_0, 0), (self.analog_quadrature_demod_cf_0_0, 0))
         self.connect((self.analog_agc2_xx_0_0, 0), (self.analog_quadrature_demod_cf_0, 0))
@@ -204,6 +211,11 @@ def main(top_block_cls=ais_rx, options=None):
 
     tb = top_block_cls(rx_gain=options.rx_gain)
     tb.start()
+    try:
+        raw_input('Press Enter to quit: ')
+    except EOFError:
+        pass
+    tb.stop()
     tb.wait()
 
 

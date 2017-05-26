@@ -66,7 +66,7 @@
     </param>
     <param>
       <key>run_options</key>
-      <value>run</value>
+      <value>prompt</value>
     </param>
     <param>
       <key>run</key>
@@ -329,7 +329,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -372,7 +372,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -749,11 +749,11 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>False</value>
+      <value>0</value>
     </param>
     <param>
       <key>file</key>
-      <value>/home/zleffke/workspace/rocksat/2017/waveforms/captures/ais_20161218_250k_2.32fc</value>
+      <value>/home/zleffke/workspace/captures/ais/ais_20161218_250k_2.32fc</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -941,7 +941,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(856, 848)</value>
+      <value>(856, 800)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -996,7 +996,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>False</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1024,7 +1024,7 @@
     </param>
     <param>
       <key>samples_per_second</key>
-      <value>samp_rate*4</value>
+      <value>samp_rate</value>
     </param>
     <param>
       <key>type</key>
@@ -2553,6 +2553,10 @@
       <value></value>
     </param>
     <param>
+      <key>hide</key>
+      <value>none</value>
+    </param>
+    <param>
       <key>type</key>
       <value>intx</value>
     </param>
@@ -3741,7 +3745,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
