@@ -1,0 +1,105 @@
+command radio: 10.101.10.10/24
+payload radio: 10.101.10.11/24
+
+command protocol
+-- case insensitive, newline separated, sent to payload radio on TCP port 2600 --
+[FORMAT: ascii command string: command function]
+adsb: start adsb decoder
+ais: start ais decoder
+testmode: start non-gnuradio testing data source
+stop: stop active decoder
+quit: terminate and restart payload server
+exit: see quit
+
+
+Terminology:
+Frames:  Shall refer to the 256 Byte AO40 style packets transmitted on the downlink.
+Packets:  Shall refer to the Data field of a Frame.
+Messages:  Shall refere to the specific messages encapsulated by the Data Field
+    For example:  A Frame's data field may contain up to 32 ADSB messages.
+                  A Frames Data Field will contain multiple !AIVDM encoded AIS messages.
+
+------DOWNLINK FRAME FORMAT--------------
+All Downlink Frames shall be exactly 256 bytes long
+This is a requirement for the AO-40 style forward error correction process.
+
+Header:
+6 bytes: Callsign
+2 bytes: Downlink Frame Count
+2 bytes: Uplink Frame Count
+1 bytes: Downlink Frame Type
+245 bytes:  Data Field
+
+--------------------------------------------------------------------
+| Callsign  | DL Frame ID | UL Frame ID | Frame Type | Data        |
+| (6 bytes) | (2 bytes)   | (2 bytes)   | (1 byte)   | (245 bytes) |
+--------------------------------------------------------------------
+
+Callsign:
+Data Type:  String
+Standard Ascii Byte values for Callsign
+Callsign is ALL CAPS
+For this Mission, callsign shall be:  KJ4WRQ
+
+DL Frame ID:
+Data type:  uint16
+Downlink Frame ID number.
+Downlink Frame ID shall be incremented for every unique frame transmitted on the downlink.
+If a frame is transmitted multiple times for GNU Radio back pressure purposes, the Frame ID whall NOT change.
+
+UL Frame ID:
+Data Type: uint16
+Uplink Frame ID number.
+Uplink Frame ID number is the ID number of the last decode uplink command frame.
+
+Frame Type:
+Data Type: uint8
+The Frame type shall indicate what type of downlink frame is being sent.
+Valid Frame Types Are:
+
+|Dec | Hex  | Bin      | Frame Type
+-----------------------------------
+|0   | 0x00 | 00000000 | ADSB
+|1   | 0x01 | 00000001 | AIS
+|2   | 0x02 | 00000010 | Hardware Telemetry
+|3   | 0x03 | 00000011 | Software Telemetry
+
+
+
+ADSB:
+8: message count
+(byte boundary)
+32: bitmap for message lengths (0=56,1=112)
+length indicator field is LSB.
+That is the LSB indicates length of message 1, MSB indicates the length of message 32.
+{56,112}*count: messages
+<padding out to 252 bytes>
+------END DOWNLINK FRAME FORMAT--------------
+
+data reporting protocol
+-- start of 245-byte packet sent to cmd radio on UDP port 1337 --
+[FORMAT: bits in downlink packet (2048 total): purpose]
+2: packet type
+
+PACKET TYPES:
+
+00: ADSB
+6: message count
+(byte boundary)
+32: bitmap for message lengths (0=56,1=112)
+{56,112}*count: messages
+<padding out to 252 bytes>
+
+01: AIS
+AIS is variable length.
+Sending the NMEA encoded !AIVDM message strings in order to retain the channel information (A or B).
+'!' is a unique symbol in the AIS alphabet.
+So will just append messages until 256 byte frame built and properly zero padded.
+On Receive will parse based on '!' symbol to reconstruct the frame
+Will ADD a '!' symbol for all zero padding operations to distinguish the zero pad field from the last message.
+
+10: Hardware telemetry
+(Zach)
+
+11: Software telemetry
+(Marcus)
