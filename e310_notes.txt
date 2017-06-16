@@ -20,6 +20,15 @@ ref link:  http://www.thegeekstuff.com/2010/08/how-to-add-swap-space/?utm_source
 -file based technique instead of dedicated partition
 -
 
+To enable autoboot:
+
+echo 1 > /sys/devices/axi_pmu.3/autoboot
+
+Note after a number of 'Automatic Power Cycles' this reverted back to '0' and stopped autobooting.
+Not sure why but found this thread:
+http://lists.ettus.com/pipermail/usrp-users_lists.ettus.com/2016-November/022622.html
+
+
 
 
 
