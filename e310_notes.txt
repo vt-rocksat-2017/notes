@@ -1,0 +1,35 @@
+Successfully burned SD Card image.
+
+htop reveals:  2 cores, 1008 MB of memory, no swap
+
+change hostname to cmd-e310
+changed IP address to 192.168.20.40
+Google DNS servers
+
+Enabling X11 Forwarding:
+in /etc/ssh/sshd_config
+uncomment the line #X11Forwarding no and change "no" to "yes".
+
+Expanding file system to recognize full SD Card:
+
+
+
+
+CREATING SWAP:
+ref link:  http://www.thegeekstuff.com/2010/08/how-to-add-swap-space/?utm_source=feedburner
+-file based technique instead of dedicated partition
+-
+
+To enable autoboot:
+
+echo 1 > /sys/devices/axi_pmu.3/autoboot
+
+Note after a number of 'Automatic Power Cycles' this reverted back to '0' and stopped autobooting.
+Not sure why but found this thread:
+http://lists.ettus.com/pipermail/usrp-users_lists.ettus.com/2016-November/022622.html
+
+
+
+
+
+
